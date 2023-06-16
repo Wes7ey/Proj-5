@@ -1,94 +1,67 @@
-<script setup>
-  import { ref } from 'vue'
-  import { useField, useForm } from 'vee-validate'
+<script>
+export default {
+  data: () => ({
+    isFormValid: true,
+    user: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
 
-  
+    userRules: [
+      (value) => !/\s/.test(value) || "O usuário não pode conter espaços",
+      (value) =>
+        !/[A-Z]/.test(value) || "O usuário não pode conter letras maiúsculas",
+    ],
 
-  const { handleSubmit, handleReset } = useForm({
-    validationSchema: {
-      name (value) {
-        if (value?.length >= 2) return true
+    emailRules: [(v) => /.+@.+\..+/.test(v) || "E-mail inválido"],
 
-        return 'Name needs to be at least 2 characters.'
-      },
-      phone (value) {
-        if (value?.length > 9 && /[0-9-]+/.test(value)) return true
+    rulesPass: [
+      (value) => (value && value.length >= 8) || "Min 8 characters",
+      (v) =>
+        /^(?=.*\d)(?=.*[!@#$%^&*])/.test(v) ||
+        "A senha deve conter pelo menos um número e um caractere especial",
+    ],
+    
+  }),
+  methods: {
+    isPasswordMatch(value) {
+      return value === this.password || "As senhas não coincidem";
 
-        return 'Phone number needs to be at least 9 digits.'
-      },
-      email (value) {
-        if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
-
-        return 'Must be a valid e-mail.'
-      },
-      select (value) {
-        if (value) return true
-
-        return 'Select an item.'
-      },
-      checkbox (value) {
-        if (value === '1') return true
-        
-        return 'Must be checked.'
-      },
     },
-  })
-  const name = useField('name')
-  const phone = useField('phone')
-  const email = useField('email')
-  const select = useField('select')
-  const checkbox = useField('checkbox')
-
-  const items = ref([
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-  ])
-
-  const submit = handleSubmit(values => {
-    alert(JSON.stringify(values, null, 2))
-  })
+  },
+};
 </script>
 
 <template>
-    <form @submit.prevent="submit">
-      <v-text-field
-        v-model="name.value.value"
-        :counter="10"
-        :error-messages="name.errorMessage.value"
-        label="Nome de Usuário"
-      ></v-text-field>
+  <v-form @submit.prevent v-model="isFormValid">
+    <v-text-field
+      v-model="user"
+      label="Nome de Usuário"
+      :rules="userRules"
+    ></v-text-field>
 
-      <v-text-field
-        v-model="email.value.value"
-        :error-messages="email.errorMessage.value"
-        label="E-mail"
-      ></v-text-field>
-  
-      <v-text-field
-        v-model="phone.value.value"
-        :counter="8"
-        :error-messages="phone.errorMessage.value"
-        label="Senha"
-      ></v-text-field>
-  
-      <v-text-field
-        v-model="phone.value.value"
-        :counter="8"
-        :error-messages="phone.errorMessage.value"
-        label="Confirmar senha"
-      ></v-text-field>
-  
-      <v-btn
-        class="me-4"
-        type="submit"
-      >
-        Cadastrar
-      </v-btn>
-  
-      <v-btn @click="handleReset">
-        Limpar
-      </v-btn>
-    </form>
-  </template>
+    <v-text-field
+      v-model="email"
+      :rules="emailRules"
+      label="E-mail"
+    ></v-text-field>
+
+    <v-text-field
+      v-model="password"
+      label="Senha"
+      :rules="rulesPass"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      v-model="confirmPassword"
+      :rules=[isPasswordMatch]
+      label= "Confirmar Senha"
+      required
+    ></v-text-field>
+
+    <v-btn class="me-4" type="submit" :disabled="!isFormValid">
+      Cadastrar
+    </v-btn>
+  </v-form>
+</template>
