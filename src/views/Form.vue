@@ -18,7 +18,7 @@ export default {
     rulesPass: [
       (value) => (value && value.length >= 8) || "Min 8 characters",
       (v) =>
-        /^(?=.*\d)(?=.*[!@#$%^&*])/.test(v) ||
+        /^(?=.*\d)(?=.*[! " # $ % & ' ( ) * + , - . / : ; < = > ? @   ^ _` { | } ~ ])/.test(v) ||
         "A senha deve conter pelo menos um número e um caractere especial",
     ],
     
@@ -63,5 +63,6 @@ export default {
     <v-btn class="me-4" type="submit" :disabled="!isFormValid">
       Cadastrar
     </v-btn>
+    
   </v-form>
 </template>

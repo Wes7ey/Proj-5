@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex">
-    <router-link to="/login" exact :class="{ 'disabled-button': $route.path === '/login' }">Login</router-link>
+    <router-link to="/" exact :class="{ 'disabled-button': $route.path === '/' }">Login</router-link>
    <p>   |  </p>  
       <router-link to="/form" exact :class="{ 'disabled-button': $route.path === '/form' }">Cadastro</router-link>
   </div>
