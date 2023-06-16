@@ -6,10 +6,7 @@ export default {
     password: "",
     emailRules: [(v) => /.+@.+\..+/.test(v) || "E-mail inválido"],
     rulesPass: [
-      (value) => (value && value.length >= 8) || "Min 8 characters",
-      (v) =>
-        /^(?=.*\d)(?=.*[!@#$%^&*])/.test(v) ||
-        "A senha deve conter pelo menos um número e um caractere especial",
+      (value) => (value.lenght >= 0) || "Digite uma senha",
     ],
   }),
   }
@@ -52,6 +49,7 @@ export default {
     border: 1px solid black;
     min-height: 300px;
     width: 400px;
+    margin-top: 250px;
 }
 
 .input-field{
