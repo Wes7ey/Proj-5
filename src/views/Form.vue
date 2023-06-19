@@ -34,10 +34,10 @@ export default {
 <template>
   <main class="d-flex flex-column justify-center align-center h-100">
     <div
-      class="d-flex flex-column justify-center align-center pa-8 w-80% rounded-lg bg-white"
+      class="d-flex flex-column justify-center align-center pa-8 w-100% rounded-lg bg-white"
     >
       <h1 class="text-black">DADOS PARA CADASTRO</h1>
-      <v-form @submit.prevent v-model="isFormValid">
+      <v-form @submit.prevent v-model="isFormValid" class="d-flex flex-column align-center">
         <v-text-field
           v-model="user"
           label="Nome de Usuário"
@@ -61,6 +61,15 @@ export default {
           class="input-field"
         ></v-text-field>
 
+        <div class="text-caption">
+          <ul>
+            <h3>As senhas devem conter:</h3>
+            <li>No mínimo 8 caracteres</li>
+            <li>Apenas letras minúsculas</li>
+            <li>Pelo menos um caractere especial</li>
+          </ul>
+        </div>
+
         <v-text-field
           v-model="confirmPassword"
           :rules="[isPasswordMatch]"
@@ -82,7 +91,7 @@ export default {
   background-color: #e7f1d5;
   width: 600px;
   height: 50px;
-  margin: 40px;
+  margin: 25px;
   color: black;
 }
 </style>
