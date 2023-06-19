@@ -6,16 +6,16 @@ export default {
     password: "",
     emailRules: [(v) => /.+@.+\..+/.test(v) || "E-mail inválido"],
     rulesPass: [
-      (value) => (value.lenght >= 0) || "Digite uma senha",
-    ],
+      (value) => (!!value) || "Senha inválida",
+  ],
   }),
   }
 </script>
 
 <template>
-  <main class="d-flex flex-row justify-center justify-space-around align-center">
+  <main class="d-flex flex-column justify-center align-center h-100 ">
 
-      <v-container class="display d-flex flex-column justify-center align-center rounded-xl">
+      <v-container class="display d-flex flex-column justify-center align-center rounded-xl w-auto bg-white">
 
   <v-form @submit.prevent v-model="isFormValid">
       <v-text-field
@@ -42,15 +42,6 @@ export default {
 </template>
 
 <style scoped>
-
-
-.display{
-    background-color: rgb(247, 242, 242);
-    border: 1px solid black;
-    min-height: 300px;
-    width: 400px;
-    margin-top: 250px;
-}
 
 .input-field{
   background-color: #E7F1D5;

@@ -33,8 +33,9 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <h1>Dados para cadastro</h1>
+  <main class="d-flex flex-column justify-center align-center h-100">
+  <div class="d-flex flex-column justify-center align-center pa-8 w-80% rounded-lg bg-white">
+    <h1 class="text-black">DADOS PARA CADASTRO</h1>
   <v-form @submit.prevent v-model="isFormValid">
     <v-text-field
       v-model="user"
@@ -55,7 +56,7 @@ export default {
       label="Senha"
       :rules="rulesPass"
       class="input-field "
-      required
+      
     ></v-text-field>
 
     <v-text-field
@@ -72,21 +73,11 @@ export default {
     </v-btn>
 
 </div>
-
+</main>
 </template>
 
 <style scoped>
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-inline: 400px;
-    margin-top: 100px;
-    background-color: white;
-    padding: 20px;
-  }
 .input-field
 {
   background-color: #E7F1D5;
@@ -95,5 +86,4 @@ export default {
   margin: 40px;
   color: black;
 }
-
 </style>

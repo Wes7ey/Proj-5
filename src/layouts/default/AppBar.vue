@@ -1,18 +1,18 @@
 <template>
-  <div class="d-flex justify-end ma-2">
+  <div class="d-flex justify-center ma-2">
     <router-link
       to="/"
       exact
       :class="{ 'disabled-button': $route.path === '/' }"
-      class=" text-decoration-none button"
+      class=" text-decoration-none navbar"
       >← Login
     </router-link>
-    <p class="button" >|</p>
+    <p class="navbar" >|</p>
     <router-link
       to="/form"
       exact
       :class="{ 'disabled-button': $route.path === '/form' }"
-      class=" text-decoration-none button"
+      class=" text-decoration-none navbar"
       >Cadastro →</router-link
     >
   </div>
@@ -30,9 +30,10 @@
   margin: 2;
 }
 
-.button {
+.navbar {
 color: green;
 padding: 3px;
+font-size:x-large;
 }
 
 </style>
