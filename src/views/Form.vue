@@ -58,7 +58,7 @@ export default {
       >
         <inputfield
           v-model="user"
-          label="Nome de Usuário (Apenas letras minusculas e sem espaços)"
+          label="Nome de Usuário (Apenas letras minúsculas e sem espaços)"
           :rules="userRules"
           autofocus
         >
@@ -73,7 +73,7 @@ export default {
 
         <inputfield
           v-model="password"
-          label="Senha (No minimo 8 digitos e 1 caractere especial)"
+          label="Senha (No mínimo 8 dígitos e 1 caractere especial)"
           :rules="rulesPass"
         >
         </inputfield>
