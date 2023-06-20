@@ -14,9 +14,6 @@ export default {
     emailRules: [(v) => /.+@.+\..+/.test(v) || "E-mail inválido"],
     rulesPass: [(value) => !!value || "Senha inválida"],
   }),
-  mounted() {
-    this.isFirstFieldFocused = true;
-  },
 };
 </script>
 
