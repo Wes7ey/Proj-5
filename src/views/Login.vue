@@ -1,5 +1,10 @@
 <script>
+import inputfield from "@/components/Input.vue";
+
 export default {
+  components: {
+    inputfield,
+  },
   data: () => ({
     show1: true,
     show2: false,
@@ -20,38 +25,29 @@ export default {
     <v-container
       class="display d-flex flex-column justify-center align-center rounded-xl w-auto bg-white"
     >
+      <h1>FAÇA SEU LOGIN</h1>
       <v-form @submit.prevent v-model="isFormValid">
-        <v-text-field
+        <inputfield
           v-model="email"
-          :rules="emailRules"
           label="E-mail"
-          class="input-field"
-          ref="firstField"
+          :rules="emailRules"
           autofocus
-        ></v-text-field>
+        >
+        </inputfield>
 
-        <v-text-field
-          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+        <inputfield
+          v-model="password"
+          label="Senha"
           :rules="rulesPass"
+          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show2 ? 'text' : 'password'"
           name="input-10-2"
-          label="Senha"
-          class="input-field"
           @click:append="show2 = !show2"
-        ></v-text-field>
+        >
+        </inputfield>
       </v-form>
 
       <v-btn :disabled="!isFormValid" elevation="8">Logar</v-btn>
     </v-container>
   </main>
 </template>
-
-<style scoped>
-.input-field {
-  background-color: #e7f1d5;
-  width: 300px;
-  height: 50px;
-  margin: 50px;
-  color: black;
-}
-</style>
