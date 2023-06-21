@@ -36,7 +36,7 @@ export default {
           v-model="password"
           label="Senha"
           :rules="rulesPass"
-          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+          :append-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
           :type="show2 ? 'text' : 'password'"
           name="input-10-2"
           @click:append="show2 = !show2"
