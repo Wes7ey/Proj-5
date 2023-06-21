@@ -14,18 +14,18 @@ export default {
 
     userRules: [
       (value) => !/\s/.test(value) || "Usuário inválido",
-      (value) =>
-        !/[A-Z]/.test(value) || "Usuário inválidos",
+      (value) => !/[A-Z]/.test(value) || "Usuário inválido",
+      (value) => /[a-z]/.test(value) || "Usuário inválido",
     ],
 
     emailRules: [(v) => /.+@.+\..+/.test(v) || "E-mail inválido"],
 
     rulesPass: [
-      (value) => (value && value.length >= 8) || "E-mail inválido",
+      (value) => (value && value.length >= 8) || "Senha inválida",
       (v) =>
         /^(?=.*\d)(?=.*[! " # $ % & ' ( ) * + , - . / : ; < = > ? @   ^ _` { | } ~ ])/.test(
           v
-        ) || "E-mail inválido",
+        ) || "Senha inválida",
     ],
   }),
   computed: {
