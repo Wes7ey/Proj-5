@@ -3,6 +3,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/home',
+    name: 'Home',
+    component: () => import('@/views/Home.vue'),
+  },
+  {
+    
     path: '/',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
@@ -17,7 +23,7 @@ const routes = [
         component: () => import('@/views/Form.vue'),
 
 
-      }
+      },
     ],
   },
 ]

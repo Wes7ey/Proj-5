@@ -15,11 +15,13 @@
       class="text-decoration-none navbar"
       >Cadastro</router-link
     >
+   
   </div>
 </template>
 
-<script setup>
-//
+<script>
+
+
 </script>
 
 <style scoped>

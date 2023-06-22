@@ -1,10 +1,14 @@
-import { api } from "./index";
+import { publicApi } from "./index";
 
 export const authApiMixin = {
   methods: {
     async register(payload) {
-      const res = await api.post("/auth/register", payload);
+      const res = await publicApi.post("/auth/register", payload);
       return res;
+    },
+    async login(payload) {
+      const result = await publicApi.post("/auth/login", payload);
+      return result;
     },
   },
 };

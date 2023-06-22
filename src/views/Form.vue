@@ -54,7 +54,7 @@ export default {
       try {
         await this.register(payload);
         alert("Usuário criado com sucesso");
-        this.$router.push("/login");
+        this.$router.push("/");
       } catch (err) {
         const status = err.response.status;
         if (status >= 500 && status < 600) {
