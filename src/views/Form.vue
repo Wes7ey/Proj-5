@@ -1,7 +1,9 @@
 <script>
 import inputfield from "@/components/Input.vue";
+import { authApiMixin } from "@/api/auth";
 
 export default {
+  mixins: [authApiMixin],
   components: {
     inputfield,
   },
@@ -40,6 +42,27 @@ export default {
     },
     isPasswordMatch() {
       return (value) => value === this.password || "As senhas não coincidem.";
+    },
+  },
+  methods: {
+    async handleSubmit() {
+      const payload = {
+        username: this.user,
+        email: this.email,
+        password: this.password,
+      };
+      try {
+        await this.register(payload);
+        alert("Usuário criado com sucesso");
+        this.$router.push("/login");
+      } catch (err) {
+        const status = err.response.status;
+        if (status >= 500 && status < 600) {
+          alert("Ocorreu um erro no servidor");
+        } else {
+          alert("Algo deu errado");
+        }
+      }
     },
   },
 };
@@ -86,7 +109,12 @@ export default {
         </inputfield>
       </v-form>
 
-      <v-btn class="me-4" type="submit" :disabled="!isFormValid">
+      <v-btn
+        class="me-4"
+        type="submit"
+        :disabled="!isFormValid"
+        @Click="handleSubmit"
+      >
         Cadastrar
       </v-btn>
     </div>
