@@ -1,5 +1,5 @@
 <script>
-import inputfield from "@/components/Input.vue";
+import inputField from "@/components/Input.vue";
 import { authApiMixin } from "@/api/auth";
 import { setupPrivateApi } from "@/api";
 
@@ -7,7 +7,7 @@ import { setupPrivateApi } from "@/api";
 export default {
   mixins: [authApiMixin],
   components: {
-    inputfield,
+    inputField,
   },
   data: () => ({
     snackbar: false,
@@ -49,15 +49,15 @@ export default {
     >
       <h1>FAÇA SEU LOGIN</h1>
       <v-form @submit.prevent v-model="isFormValid">
-        <inputfield
+        <inputField
           v-model="email"
           label="E-mail"
           :rules="emailRules"
           autofocus
         >
-        </inputfield>
+        </inputField>
 
-        <inputfield
+        <inputField
           v-model="password"
           label="Senha"
           :rules="rulesPass"
@@ -66,7 +66,7 @@ export default {
           name="input-10-2"
           @click:append="show2 = !show2"
         >
-        </inputfield>
+        </inputField>
       </v-form>
 
       <v-btn :disabled="!isFormValid" elevation="8" @click="handleSubmit"

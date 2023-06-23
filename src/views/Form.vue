@@ -1,11 +1,11 @@
 <script>
-import inputfield from "@/components/Input.vue";
+import inputField from "@/components/Input.vue";
 import { authApiMixin } from "@/api/auth";
 
 export default {
   mixins: [authApiMixin],
   components: {
-    inputfield,
+    inputField,
   },
   data: () => ({
     isFormValid: true,
@@ -79,34 +79,34 @@ export default {
         v-model="isFormValid"
         class="d-flex flex-column align-center"
       >
-        <inputfield
+        <inputField
           v-model="user"
           label="Nome de Usuário (Apenas letras minúsculas e sem espaços)"
           :rules="userRules"
           autofocus
         >
-        </inputfield>
+        </inputField>
 
-        <inputfield
+        <inputField
           v-model="email"
           label="E-mail (exemplo@123.com)"
           :rules="emailRules"
         >
-        </inputfield>
+        </inputField>
 
-        <inputfield
+        <inputField
           v-model="password"
           label="Senha (No mínimo 8 dígitos e 1 caractere especial)"
           :rules="rulesPass"
         >
-        </inputfield>
+        </inputField>
 
-        <inputfield
+        <inputField
           v-model="confirmPassword"
           label="Confirmar Senha"
           :rules="[isPasswordMatch]"
         >
-        </inputfield>
+        </inputField>
       </v-form>
 
       <v-btn
