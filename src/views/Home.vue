@@ -6,9 +6,18 @@
     </v-form>
 
     <v-card v-for="list in toDoLists" :key="list.id">
-      <v-card-title>{{ list.title }}</v-card-title>
+      <v-card-title>
+        <div v-if="list.editing">
+ <v-text-field v-model="list.title"></v-text-field>
+          <v-btn icon="mdi-check" class="ms-5" @click="saveListTitle(list)"></v-btn>
+        </div>
+        <div v-else>
+ <span>{{ list.title }}</span>
+          <v-btn icon="mdi-pencil-outline" class="ms-5" @click="startListEditing(list)" ></v-btn>
+          <v-btn icon="mdi-close" class="ms-5" @click="removeList(list.id)" ></v-btn>
+        </div>
+</v-card-title>
     </v-card>
-
   </div>
 </template>
 
@@ -22,6 +31,7 @@ export default {
     return {
       toDoLists: [],
       listTitle: "",
+      id: "",
     };
   },
 
@@ -29,7 +39,7 @@ export default {
     async getLists() {
       try {
         const { data } = await this.list();
-        this.toDoLists = data;
+        this.toDoLists = data.map((list) => ({ ...list, editing: false }));
       } catch (err) {
         alert("Algo deu errado");
       }
@@ -45,6 +55,30 @@ export default {
         this.getLists();
       } catch (err) {
         alert("Erro ao criar a lista");
+      }
+    },
+ async startListEditing(list) {
+      list.editing = true;
+    },
+
+    async saveListTitle(list) {
+      try {
+        const payload = {
+          title: list.title,
+        };
+        await this.updateList(list.id, payload);
+        list.editing = false;
+      } catch (err) {
+        alert("Erro ao editar a lista");
+      }
+    },
+
+    async removeList(id) {
+      try {
+        await this.deleteList(id);
+        this.getLists();
+      } catch (err) {
+        alert("Lista não pode ser excluída");
       }
     },
   },
