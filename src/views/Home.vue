@@ -24,20 +24,20 @@
             class="ms-5"
             @click="saveListTitle(list)"
           ></v-btn>
+          <v-btn icon="mdi-close" class="ms-5" @click="!saveListTitle(list)"></v-btn>
         </div>
         <div v-else>
-          <span
-            ><v-icon @click="toggleItems(index)">mdi-circle-medium</v-icon>
-            {{ list.title }}</span
-          >
+          <span>
+            <v-icon @click="toggleItems(index)">mdi-circle-medium</v-icon>
+            {{ list.title }}
+          </span>
 
           <v-btn
             class="ms-5"
             size="x-small"
             color="secondary"
-            @click="openModal('item', list.id), toggleItems(index)"
-            >Nova tarefa</v-btn
-          >
+            @click="openModal('item', list.id)"
+            >Nova tarefa</v-btn>
           <Lmodal
             :open="openModalType == 'item'"
             title="Criar novo item para a lista atual"
@@ -54,7 +54,7 @@
           ></v-btn>
 
           <v-btn
-            icon="mdi-close"
+            icon="mdi-delete"
             class="ms-5"
             size="small"
             @click="removeList(list.id)"
@@ -69,9 +69,10 @@
               <div class="d-flex align-center">
                 <span>
                   <v-checkbox
-                    color="success"
-                    value="red"
-                    hide-details
+                  color="success"
+                  v-model="item.done"
+                @change="changeStatus(item)"
+                  hide-details
                   ></v-checkbox>
                 </span>
                 <span v-if="item.editing">
@@ -79,9 +80,15 @@
                   <v-btn
                     class="ms-5"
                     size="x-small"
-                    color="primary"
+                    color="green"
                     @click="saveItemTitle(item)"
                   >Salvar</v-btn>
+                  <v-btn
+                    class="ms-5"
+                    size="x-small"
+                    color="pink"
+                    @click="!saveItemTitle(item)"
+                  >Cancelar</v-btn>
                 </span>
                 <span v-else>{{ item.title }}</span>
                 <v-btn
@@ -123,6 +130,7 @@ export default {
       openModalType: "",
       showItems: false,
       selectedList: null,
+      taskStatus: "",
     };
   },
 
@@ -142,6 +150,18 @@ export default {
         this.showItems = index;
       }
     },
+    async changeStatus(item) {
+  try {
+    let payload = {
+      done: item.done,
+    };
+    await this.updateItem(item.id, payload);
+    this.getTasks();
+  } catch (err) {
+    alert("Erro ao atualizar o status do item");
+  }
+},
+
     async getLists() {
       try {
         const { data } = await this.list();
@@ -241,7 +261,6 @@ export default {
       }
     },
   },
-
   mounted() {
     this.getLists();
     this.getTasks();
