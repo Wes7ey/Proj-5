@@ -4,14 +4,13 @@
       <v-card-title>
         <span>{{ title }}</span>
       </v-card-title>
+
       <v-card-text>
         <v-form>
-          <v-text-field
-            v-model="info"
-            :placeholder="placeholder"
-          ></v-text-field>
+          <v-text-field v-model="info" :placeholder="placeholder"></v-text-field>
         </v-form>
       </v-card-text>
+      
       <v-card-actions>
         <v-btn @click="create">Criar</v-btn>
         <v-btn @click="closeModal">Cancelar</v-btn>

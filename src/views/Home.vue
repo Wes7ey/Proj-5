@@ -2,28 +2,17 @@
   <div>
     <h1 class="my-5 mx-5">
       Tarefas
-      <v-btn
-        icon="mdi-folder-plus"
-        size="small"
-        @click="openModal('list')"
-      ></v-btn>
+      <v-btn icon="mdi-folder-plus" size="small" @click="openModal('list')"></v-btn>
     </h1>
-    <Lmodal
-      :open="openModalType == 'list'"
-      title="Criar nova lista"
-      placeholder="Nome da lista"
+    <Lmodal :open="openModalType == 'list'" title="Criar nova lista" placeholder="Nome da lista"
       @create="createNewList"
-      @closeModal="openModalType = ''"
-    />
+      @closeModal="openModalType = ''" />
+
     <v-card v-for="(list, index) in toDoLists" :key="list.id">
       <v-card-title>
         <div v-if="list.editing">
           <v-text-field v-model="list.title"></v-text-field>
-          <v-btn
-            icon="mdi-check"
-            class="ms-5"
-            @click="saveListTitle(list)"
-          ></v-btn>
+          <v-btn icon="mdi-check" class="ms-5" @click="saveListTitle(list)" ></v-btn>
           <v-btn icon="mdi-close" class="ms-5" @click="!saveListTitle(list)"></v-btn>
         </div>
         <div v-else>
@@ -32,33 +21,14 @@
             {{ list.title }}
           </span>
 
-          <v-btn
-            class="ms-5"
-            size="x-small"
-            color="secondary"
-            @click="openModal('item', list.id)"
-            >Nova tarefa</v-btn>
-          <Lmodal
-            :open="openModalType == 'item'"
-            title="Criar novo item para a lista atual"
-            placeholder="Novo item"
+          <v-btn class="ms-5" size="x-small" color="secondary" @click="openModal('item', list.id)">Nova tarefa</v-btn>
+          <Lmodal :open="openModalType == 'item'" title="Criar novo item para a lista atual" placeholder="Novo item"
             @create="createNewItem"
-            @closeModal="openModalType = ''"
-          />
+            @closeModal="openModalType = ''"/>
 
-          <v-btn
-            icon="mdi-pencil-outline"
-            class="ms-5"
-            size="small"
-            @click="startEditing(list)"
-          ></v-btn>
+          <v-btn icon="mdi-pencil-outline" class="ms-5" size="small" @click="startEditing(list)"></v-btn>
 
-          <v-btn
-            icon="mdi-delete"
-            class="ms-5"
-            size="small"
-            @click="removeList(list.id)"
-          ></v-btn>
+          <v-btn icon="mdi-delete" class="ms-5" size="small" @click="removeList(list.id)"></v-btn>
         </div>
       </v-card-title>
 
@@ -68,42 +38,17 @@
             <v-list-item-title>
               <div class="d-flex align-center">
                 <span>
-                  <v-checkbox
-                  color="success"
-                  v-model="item.done"
-                @change="changeStatus(item)"
-                  hide-details
-                  ></v-checkbox>
+                  <v-checkbox color="success" v-model="item.done" @change="changeStatus(item)" hide-details></v-checkbox>
                 </span>
                 <span v-if="item.editing">
                   <v-text-field v-model="item.title"></v-text-field>
-                  <v-btn
-                    class="ms-5"
-                    size="x-small"
-                    color="green"
-                    @click="saveItemTitle(item)"
-                  >Salvar</v-btn>
-                  <v-btn
-                    class="ms-5"
-                    size="x-small"
-                    color="pink"
-                    @click="!saveItemTitle(item)"
-                  >Cancelar</v-btn>
+                  <v-btn class="ms-5" size="x-small" color="green" @click="saveItemTitle(item)">Salvar</v-btn>
+                  <v-btn class="ms-5" size="x-small" color="pink" @click="!saveItemTitle(item)">Cancelar</v-btn>
                 </span>
+
                 <span v-else>{{ item.title }}</span>
-                <v-btn
-                  class="ms-5"
-                  size="x-small"
-                  color="purple-darken-1"
-                  @click="startEditing(item)"
-                >Editar</v-btn>
-                <v-btn
-                  class="ms-5"
-                  size="x-small"
-                  color="red-darken-1"
-                  @click="removeItem(item.id)"
-                  >Deletar</v-btn
-                >
+                <v-btn class="ms-5" size="x-small" color="purple-darken-1" @click="startEditing(item)" >Editar</v-btn>
+                <v-btn class="ms-5" size="x-small" color="red-darken-1" @click="removeItem(item.id)">Deletar</v-btn>
               </div>
             </v-list-item-title>
           </v-list-item>
