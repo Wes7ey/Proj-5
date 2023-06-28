@@ -15,7 +15,7 @@
       @create="createNewList"
       @closeModal="openModalType = ''"
     />
-    <v-card v-for="list in toDoLists" :key="list.id">
+    <v-card v-for="(list, index) in toDoLists" :key="list.id">
       <v-card-title>
         <div v-if="list.editing">
           <v-text-field v-model="list.title"></v-text-field>
@@ -26,13 +26,16 @@
           ></v-btn>
         </div>
         <div v-else>
-          <span><v-icon>mdi-circle-medium</v-icon> {{ list.title }}</span>
+          <span
+            ><v-icon @click="toggleItems(index)">mdi-circle-medium</v-icon>
+            {{ list.title }}</span
+          >
 
           <v-btn
             class="ms-5"
             size="x-small"
             color="secondary"
-            @click="openModal('item', list.id)"
+            @click="openModal('item', list.id), toggleItems(index)"
             >Nova tarefa</v-btn
           >
           <Lmodal
@@ -58,7 +61,7 @@
         </div>
       </v-card-title>
 
-      <v-card-text>
+      <v-card-text v-show="showItems === index">
         <v-list>
           <v-list-item v-for="item in getItemsByListId(list.id)" :key="item.id">
             <v-list-item-title>
@@ -109,7 +112,7 @@ export default {
       toDoItems: {},
       itemTitle: "",
       openModalType: "",
-
+      showItems: false,
       selectedList: null,
       doido: "",
     };
@@ -124,7 +127,13 @@ export default {
       this.selectedList = listId;
       this.openModalType = type;
     },
-
+    toggleItems(index) {
+      if (this.showItems === index) {
+        this.showItems = null;
+      } else {
+        this.showItems = index;
+      }
+    },
     async getLists() {
       try {
         const { data } = await this.list();
@@ -142,9 +151,9 @@ export default {
         };
         await this.createList(payload);
         this.openModalType = "";
-
         this.listTitle = "";
         this.getLists();
+        this.showItems = true;
       } catch (err) {
         alert("Erro ao criar a lista");
       }
