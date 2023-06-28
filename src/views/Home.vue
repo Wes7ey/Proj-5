@@ -52,6 +52,7 @@
             size="small"
             @click="startEditing(list)"
           ></v-btn>
+
           <v-btn
             icon="mdi-close"
             class="ms-5"
@@ -73,14 +74,22 @@
                     hide-details
                   ></v-checkbox>
                 </span>
-                <span>{{ item.title }}</span>
+                <span v-if="item.editing">
+                  <v-text-field v-model="item.title"></v-text-field>
+                  <v-btn
+                    class="ms-5"
+                    size="x-small"
+                    color="primary"
+                    @click="saveItemTitle(item)"
+                  >Salvar</v-btn>
+                </span>
+                <span v-else>{{ item.title }}</span>
                 <v-btn
                   class="ms-5"
                   size="x-small"
                   color="purple-darken-1"
                   @click="startEditing(item)"
-                  >Editar</v-btn
-                >
+                >Editar</v-btn>
                 <v-btn
                   class="ms-5"
                   size="x-small"
@@ -114,7 +123,6 @@ export default {
       openModalType: "",
       showItems: false,
       selectedList: null,
-      doido: "",
     };
   },
 
@@ -210,6 +218,17 @@ export default {
         this.getTasks();
       } catch (err) {
         alert("Erro ao criar o item");
+      }
+    },
+    async saveItemTitle(item){
+      try {
+        const payload = {
+          title: item.title,
+        };
+        await this.updateItem(item.id, payload);
+        item.editing = false;
+      } catch (err) {
+        alert("Erro ao editar o item");
       }
     },
 
