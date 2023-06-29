@@ -1,10 +1,10 @@
-  import { privateApi } from "./index";
+import { privateApi } from "./index";
 
-  export const toDoItemsApiMixin = {
-    methods: {
-      async item() {
-        return await privateApi.get("/items");
-      },
+export const toDoItemsApiMixin = {
+  methods: {
+    async item() {
+      return await privateApi.get("/items");
+    },
     async createItem(payload) {
       return await privateApi.post("/items/new", payload);
     },

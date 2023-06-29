@@ -1,54 +1,144 @@
 <template>
-  <div>
+  <div class="d-flex flex-column justify-center ">
     <h1 class="my-5 mx-5">
-      Tarefas
-      <v-btn icon="mdi-folder-plus" size="small" @click="openModal('list')"></v-btn>
-    </h1>
-    <Lmodal :open="openModalType == 'list'" title="Criar nova lista" placeholder="Nome da lista"
-      @create="createNewList"
-      @closeModal="openModalType = ''" />
+      <div class="loading-container" v-if="loading">
+        <Loader></Loader>
+      </div>
+      Minhas de Atividades
 
-    <v-card v-for="(list, index) in toDoLists" :key="list.id">
-      <v-card-title>
+      <v-btn class="rounded-pill" @click="openModal('list')">
+        <v-icon icon="mdi-folder-edit-outline"></v-icon>
+        <v-tooltip activator="parent" location="right"
+          >Criar nova lista</v-tooltip
+        >
+      </v-btn>
+    </h1>
+    <Lmodal
+      :open="openModalType == 'list'"
+      title="Criar nova lista"
+      placeholder="Nome da lista"
+      @create="createNewList"
+      @closeModal="openModalType = ''"
+    />
+
+    <v-card
+      v-for="(list, index) in toDoLists"
+      :key="list.id"
+      class="rounded-lg"
+      color="black"
+    >
+      <v-card-title class="cardTitle">
         <div v-if="list.editing">
           <v-text-field v-model="list.title"></v-text-field>
-          <v-btn icon="mdi-check" class="ms-5" @click="saveListTitle(list)" ></v-btn>
-          <v-btn icon="mdi-close" class="ms-5" @click="!saveListTitle(list)"></v-btn>
+          <v-btn
+            icon="mdi-check"
+            size="x-small"
+            class="ms-5"
+            color="green"
+            @click="saveListTitle(list)"
+          ></v-btn>
+          <v-btn
+            icon="mdi-close"
+            size="x-small"
+            class="ms-5"
+            color="red"
+            @click="!saveListTitle(list)"
+          ></v-btn>
         </div>
-        <div v-else>
-          <span>
-            <v-icon @click="toggleItems(index)">mdi-circle-medium</v-icon>
-            {{ list.title }}
-          </span>
+        <div v-else class="d-flex w-100 justify-space-between">
+      <div>
+          <v-btn class="rounded-pill mr-0" @click="startEditing(list)">
+            <v-icon icon="mdi-pencil-outline"></v-icon>
+            <v-tooltip activator="parent" location="top"
+              >Editar lista</v-tooltip
+            >
+          </v-btn>
 
-          <v-btn class="ms-5" size="x-small" color="secondary" @click="openModal('item', list.id)">Nova tarefa</v-btn>
-          <Lmodal :open="openModalType == 'item'" title="Criar novo item para a lista atual" placeholder="Novo item"
+          {{ list.title }}
+        </div>
+          <div class="">
+          <v-btn class="rounded-pill ms-5" @click="toggleItems(index)">
+            <v-icon icon="mdi-list-status"></v-icon>
+            <v-tooltip activator="parent" location="top"
+              >Abrir lista de tarefas</v-tooltip
+            >
+          </v-btn>
+
+          <v-btn class="rounded-pill ms-5" @click="openModal('item', list.id)">
+            <v-icon icon="mdi-folder-file-outline"></v-icon>
+            <v-tooltip activator="parent" location="top"
+              >Criar nova tarefa</v-tooltip
+            >
+          </v-btn>
+
+          <Lmodal
+            :open="openModalType == 'item'"
+            title="Criar novo item para a lista atual"
+            placeholder="Novo item"
             @create="createNewItem"
-            @closeModal="openModalType = ''"/>
+            @closeModal="openModalType = ''"
+          />
 
-          <v-btn icon="mdi-pencil-outline" class="ms-5" size="small" @click="startEditing(list)"></v-btn>
-
-          <v-btn icon="mdi-delete" class="ms-5" size="small" @click="removeList(list.id)"></v-btn>
+          <v-btn class="rounded-pill ms-5" @click="removeList(list.id)">
+            <v-icon icon="mdi-delete"></v-icon>
+            <v-tooltip activator="parent" location="top"
+              >Deletar lista</v-tooltip
+            >
+          </v-btn>
+        </div>
         </div>
       </v-card-title>
 
-      <v-card-text v-show="showItems === index">
-        <v-list>
-          <v-list-item v-for="item in getItemsByListId(list.id)" :key="item.id">
+      <v-card-text v-show="showItems === index" class="card-text">
+        <v-list class="card-list">
+          <v-list-item
+            v-for="item in getItemsByListId(list.id)"
+            :key="item.id"
+            class="slide-item list-item"
+          >
             <v-list-item-title>
               <div class="d-flex align-center">
                 <span>
-                  <v-checkbox color="success" v-model="item.done" @change="changeStatus(item)" hide-details></v-checkbox>
+                  <v-checkbox
+                    color="green"
+                    v-model="item.done"
+                    @change="changeStatus(item)"
+                    hide-details
+                  ></v-checkbox>
                 </span>
                 <span v-if="item.editing">
                   <v-text-field v-model="item.title"></v-text-field>
-                  <v-btn class="ms-5" size="x-small" color="green" @click="saveItemTitle(item)">Salvar</v-btn>
-                  <v-btn class="ms-5" size="x-small" color="pink" @click="!saveItemTitle(item)">Cancelar</v-btn>
+                  <v-btn
+                    icon="mdi-check"
+                    size="x-small"
+                    class="ms-5"
+                    color="green"
+                    @click="saveItemTitle(item)"
+                  ></v-btn>
+                  <v-btn
+                    icon="mdi-close"
+                    size="x-small"
+                    class="ms-5"
+                    color="red"
+                    @click="!saveItemTitle(item)"
+                  ></v-btn>
                 </span>
 
                 <span v-else>{{ item.title }}</span>
-                <v-btn class="ms-5" size="x-small" color="purple-darken-1" @click="startEditing(item)" >Editar</v-btn>
-                <v-btn class="ms-5" size="x-small" color="red-darken-1" @click="removeItem(item.id)">Deletar</v-btn>
+                <v-btn
+                  class="ms-5"
+                  size="x-small"
+                  color="blue darken-1"
+                  @click="startEditing(item)"
+                  >Editar</v-btn
+                >
+                <v-btn
+                  class="ms-5"
+                  size="x-small"
+                  color="red darken-1"
+                  @click="removeItem(item.id)"
+                  >Deletar</v-btn
+                >
               </div>
             </v-list-item-title>
           </v-list-item>
@@ -62,6 +152,7 @@
 import { toDoListsApiMixin } from "@/api/toDoLists";
 import { toDoItemsApiMixin } from "@/api/toDoItems";
 import Lmodal from "@/components/listModal.vue";
+import Loader from "@/components/Loader.vue";
 
 export default {
   mixins: [toDoListsApiMixin, toDoItemsApiMixin],
@@ -73,14 +164,16 @@ export default {
       toDoItems: {},
       itemTitle: "",
       openModalType: "",
-      showItems: false,
+      showItems: null,
       selectedList: null,
       taskStatus: "",
+      loading: false,
     };
   },
 
   components: {
     Lmodal,
+    Loader,
   },
 
   methods: {
@@ -88,6 +181,7 @@ export default {
       this.selectedList = listId;
       this.openModalType = type;
     },
+
     toggleItems(index) {
       if (this.showItems === index) {
         this.showItems = null;
@@ -95,29 +189,36 @@ export default {
         this.showItems = index;
       }
     },
+
     async changeStatus(item) {
-  try {
-    let payload = {
-      done: item.done,
-    };
-    await this.updateItem(item.id, payload);
-    this.getTasks();
-  } catch (err) {
-    alert("Erro ao atualizar o status do item");
-  }
-},
+      try {
+        this.loading = true;
+        const payload = {
+          done: item.done,
+        };
+        await this.updateItem(item.id, payload);
+        this.getTasks();
+      } catch (err) {
+        alert("Erro ao atualizar o status do item");
+      } finally {
+        this.loading = false;
+      }
+    },
 
     async getLists() {
+      this.loading = true;
       try {
         const { data } = await this.list();
         this.toDoLists = data.map((list) => ({ ...list, editing: false }));
       } catch (err) {
         alert("Algo deu errado");
+      } finally {
+        this.loading = false;
       }
     },
 
     async createNewList(value) {
-      console.log(value);
+      this.loading = true;
       try {
         const payload = {
           title: value,
@@ -129,6 +230,8 @@ export default {
         this.showItems = true;
       } catch (err) {
         alert("Erro ao criar a lista");
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -137,6 +240,7 @@ export default {
     },
 
     async saveListTitle(list) {
+      this.loading = true;
       try {
         const payload = {
           title: list.title,
@@ -145,24 +249,36 @@ export default {
         list.editing = false;
       } catch (err) {
         alert("Erro ao editar a lista");
+      } finally {
+        this.loading = false;
       }
     },
 
+    cancelListEditing(list) {
+      list.editing = false;
+    },
+
     async removeList(id) {
+      this.loading = true;
       try {
         await this.deleteList(id);
         this.getLists();
       } catch (err) {
         alert("Lista não pode ser excluída");
+      } finally {
+        this.loading = false;
       }
     },
 
     async getTasks() {
+      this.loading = true;
       try {
         const { data } = await this.item();
         this.toDoItems = data;
       } catch (err) {
         alert("Algo deu errado");
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -173,6 +289,7 @@ export default {
     },
 
     async createNewItem(dataValue) {
+      this.loading = true;
       try {
         const payload = {
           title: dataValue,
@@ -183,9 +300,13 @@ export default {
         this.getTasks();
       } catch (err) {
         alert("Erro ao criar o item");
+      } finally {
+        this.loading = false;
       }
     },
-    async saveItemTitle(item){
+
+    async saveItemTitle(item) {
+      this.loading = true;
       try {
         const payload = {
           title: item.title,
@@ -194,21 +315,91 @@ export default {
         item.editing = false;
       } catch (err) {
         alert("Erro ao editar o item");
+      } finally {
+        this.loading = false;
       }
     },
 
     async removeItem(id) {
+      this.loading = true;
       try {
         await this.deleteItem(id);
         this.getTasks();
       } catch (err) {
         alert("Item não pode ser excluído");
+      } finally {
+        this.loading = false;
       }
     },
   },
+
   mounted() {
     this.getLists();
     this.getTasks();
   },
 };
 </script>
+
+<style scoped>
+.slide-item {
+  animation: slideIn 0.7s;
+}
+
+.cardTitle {
+  border: 2px solid green;
+  display: flex;
+}
+
+.list-item {
+  background-color: rgb(31, 30, 30);
+  margin: 0;
+  padding: 0;
+}
+
+.card-text {
+  padding: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+}
+
+.card-list {
+  padding: 0;
+  background-color: rgb(194, 191, 191);
+}
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
