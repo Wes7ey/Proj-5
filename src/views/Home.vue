@@ -189,9 +189,10 @@ import { toDoItemsApiMixin } from "@/api/toDoItems";
 import Lmodal from "@/components/listModal.vue";
 import Loader from "@/components/Loader.vue";
 import TitleHome from "@/components/TitleHome.vue";
+import apiMixin from "@/Mixins/apiMixins.js";
 
 export default {
-  mixins: [toDoListsApiMixin, toDoItemsApiMixin],
+  mixins: [toDoListsApiMixin, toDoItemsApiMixin, apiMixin],
 
   data() {
     return {
@@ -226,149 +227,6 @@ export default {
         this.showItems = index;
       }
     },
-
-    async changeStatus(item) {
-      try {
-        this.loading = true;
-        const payload = {
-          done: item.done,
-        };
-        await this.updateItem(item.id, payload);
-        this.getTasks();
-      } catch (err) {
-        alert("Erro ao atualizar o status do item");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async getLists() {
-      this.loading = true;
-      try {
-        const { data } = await this.list();
-        this.toDoLists = data.map((list) => ({ ...list, editing: false }));
-      } catch (err) {
-        alert("Algo deu errado");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async createNewList(value) {
-      this.loading = true;
-      try {
-        const payload = {
-          title: value,
-        };
-        await this.createList(payload);
-        this.openModalType = "";
-        this.listTitle = "";
-        this.getLists();
-        this.showItems = true;
-      } catch (err) {
-        alert("Erro ao criar a lista");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async startEditing(list) {
-      list.editing = true;
-    },
-
-    async saveListTitle(list) {
-      this.loading = true;
-      try {
-        const payload = {
-          title: list.title,
-        };
-        await this.updateList(list.id, payload);
-        list.editing = false;
-      } catch (err) {
-        alert("Erro ao editar a lista");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    cancelListEditing(list) {
-      list.editing = false;
-    },
-
-    async removeList(id) {
-      this.loading = true;
-      try {
-        await this.deleteList(id);
-        this.getLists();
-      } catch (err) {
-        alert("Lista não pode ser excluída");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async getTasks() {
-      this.loading = true;
-      try {
-        const { data } = await this.item();
-        this.toDoItems = data;
-      } catch (err) {
-        alert("Algo deu errado");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    getItemsByListId(listId) {
-      return Object.values(this.toDoItems).filter(
-        (item) => item.listId === listId
-      );
-    },
-
-    async createNewItem(dataValue) {
-      this.loading = true;
-      try {
-        const payload = {
-          title: dataValue,
-          listId: this.selectedList,
-        };
-        await this.createItem(payload);
-        this.itemTitle = "";
-        this.getTasks();
-      } catch (err) {
-        alert("Erro ao criar o item");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async saveItemTitle(item) {
-      this.loading = true;
-      try {
-        const payload = {
-          title: item.title,
-        };
-        await this.updateItem(item.id, payload);
-        item.editing = false;
-      } catch (err) {
-        alert("Erro ao editar o item");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async removeItem(id) {
-      this.loading = true;
-      try {
-        await this.deleteItem(id);
-        this.getTasks();
-      } catch (err) {
-        alert("Item não pode ser excluído");
-      } finally {
-        this.loading = false;
-      }
-    },
-
     toggleItemsAfterModalClosed() {
       if (this.toDoLists.length > 0) {
         const lastIndex = this.toDoLists.length - 1;
