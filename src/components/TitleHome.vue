@@ -10,9 +10,9 @@ export default {
     return {
       contactTexts: [
         "Bem vindo(a), de volta!😊",
-        "Por onde vamos começar hoje?",
-        "Que tal revisar as tarefas de ontem 😄",
-        "Não se esqueça de marcar as tarefas como conluídas 👍",
+        "Comece clicando aqui do lado e criando uma nova lista!",
+        "Crie tarefas e controle sua rotina",
+        "Marque suas tarefas concluídas e controle seu dia a dia",
         "Nunca é cedo para planejar o amanhã 🤗",
       ],
       typedText: "",

@@ -1,6 +1,6 @@
 <template>
   <v-dialog :model-value="open" @click:outside="closeModal">
-    <v-card>
+    <v-card class="w-25 align-self-center">
       <v-card-title>
         <span>{{ title }}</span>
       </v-card-title>
@@ -49,3 +49,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+</style>
