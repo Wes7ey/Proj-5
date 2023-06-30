@@ -4,6 +4,7 @@ import { authApiMixin } from "@/api/auth";
 import { setupPrivateApi } from "@/api";
 
 
+
 export default {
   mixins: [authApiMixin],
   components: {

@@ -4,7 +4,6 @@
       <div class="loading-container" v-if="loading">
         <Loader></Loader>
       </div>
-      Minhas de Atividades
 
       <v-btn class="rounded-pill" @click="openModal('list')">
         <v-icon icon="mdi-folder-edit-outline"></v-icon>
@@ -12,6 +11,9 @@
           >Criar nova lista</v-tooltip
         >
       </v-btn>
+      <TitleHome></TitleHome>
+
+      
     </h1>
     <Lmodal
       :open="openModalType == 'list'"
@@ -153,6 +155,9 @@ import { toDoListsApiMixin } from "@/api/toDoLists";
 import { toDoItemsApiMixin } from "@/api/toDoItems";
 import Lmodal from "@/components/listModal.vue";
 import Loader from "@/components/Loader.vue";
+import TitleHome from "@/components/TitleHome.vue";
+
+
 
 export default {
   mixins: [toDoListsApiMixin, toDoItemsApiMixin],
@@ -174,6 +179,7 @@ export default {
   components: {
     Lmodal,
     Loader,
+    TitleHome,
   },
 
   methods: {
