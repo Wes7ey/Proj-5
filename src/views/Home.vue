@@ -1,15 +1,9 @@
 <template>
   <aside
-    class="sidebar bg-black d-flex flex-column justify-space-around align-center"
+    class="sidebar bg-black d-flex flex-column justify-center align-center"
   >
-    <h2 class="d-flex justify-center">Crie sua lista aqui =]</h2>
-    <input
-      type="text"
-      v-model="listTitle"
-      placeholder="Agenda, lista de compras, compromissos importantes, compromissos do trabalho..."
-      class="d-flex"
-    />
-    <v-btn class="rounded-pill mb-3" size="x-large" @click="openModal('list')">
+    <h2>Crie sua lista aqui =]</h2>
+    <v-btn class="rounded-pill mb-3" size="x-large" @click="openModal(`list`)">
       <v-icon
         icon="mdi-folder-arrow-up-outline
 "
@@ -57,7 +51,7 @@
             >
               <v-card-title class="cardTitle">
                 <div v-if="list.editing">
-                  <v-text-field v-model="list.title"></v-text-field>
+                  <InputEditing v-model="list.title"></InputEditing>
                   <v-btn
                     icon="mdi-check"
                     size="x-small"
@@ -70,7 +64,7 @@
                     size="x-small"
                     class="ms-5"
                     color="red"
-                    @click="!saveListTitle(list)"
+                    @click="cancelEditing(list)"
                   ></v-btn>
                 </div>
                 <div v-else class="d-flex w-100 justify-space-between">
@@ -126,6 +120,7 @@
                     v-for="item in getItemsByListId(list.id)"
                     :key="item.id"
                     class="slide-item list-item"
+                    @click.stop
                   >
                     <v-list-item-title>
                       <div class="d-flex align-center">
@@ -133,25 +128,25 @@
                           <v-checkbox
                             color="green"
                             v-model="item.done"
-                            @change="changeStatus(item), toggleItems(index)"
+                            @change="changeStatus(item)"
                             hide-details
                           ></v-checkbox>
                         </span>
                         <span v-if="item.editing">
-                          <v-text-field v-model="item.title"></v-text-field>
+                          <InputEditing v-model="item.title"></InputEditing>
                           <v-btn
                             icon="mdi-check"
                             size="x-small"
                             class="ms-5"
                             color="green"
-                            @click="saveItemTitle(item), toggleItems(index)"
+                            @click="saveItemTitle(item)"
                           ></v-btn>
                           <v-btn
                             icon="mdi-close"
                             size="x-small"
                             class="ms-5"
                             color="red"
-                            @click="!saveItemTitle(item), toggleItems(index)"
+                            @click="cancelEditing(item)"
                           ></v-btn>
                         </span>
 
@@ -160,7 +155,7 @@
                           class="ms-5"
                           size="x-small"
                           color="blue darken-1"
-                          @click="startEditing(item), toggleItems(index)"
+                          @click="startEditing(item)"
                           >Editar</v-btn
                         >
                         <v-btn
@@ -190,6 +185,8 @@ import Lmodal from "@/components/listModal.vue";
 import Loader from "@/components/Loader.vue";
 import TitleHome from "@/components/TitleHome.vue";
 import apiMixin from "@/Mixins/apiMixins.js";
+import InputEditing from "@/components/InputEditing.vue";
+
 
 export default {
   mixins: [toDoListsApiMixin, toDoItemsApiMixin, apiMixin],
@@ -205,6 +202,8 @@ export default {
       selectedList: null,
       taskStatus: "",
       loading: false,
+      originalTitle: "",
+      editing: false,
     };
   },
 
@@ -212,6 +211,7 @@ export default {
     Lmodal,
     Loader,
     TitleHome,
+    InputEditing
   },
 
   methods: {
@@ -246,6 +246,7 @@ export default {
 .list-card:hover {
   zoom: 110%;
 }
+
 .main {
   min-width: 90%;
   margin: 0;
@@ -278,31 +279,9 @@ export default {
   z-index: 1;
 }
 
-.loader {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10000;
-}
-
 .card-list {
   padding: 0;
   background-color: rgb(194, 191, 191);
-}
-
-.loading-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
 }
 
 .sidebar {

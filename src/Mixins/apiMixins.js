@@ -46,6 +46,7 @@ export default {
     },
 
     async startEditing(list) {
+      list.originaTitle = list.title;
       list.editing = true;
     },
 
@@ -62,10 +63,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-
-    cancelListEditing(list) {
-      list.editing = false;
     },
 
     async removeList(id) {
@@ -141,5 +138,9 @@ export default {
         this.loading = false;
       }
     },
+    cancelEditing(list){
+      list.title=list.originaTitle
+      list.editing=false;
+    }
   },
 };
