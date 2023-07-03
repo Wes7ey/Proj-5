@@ -1,3 +1,5 @@
+import { setupPrivateApi } from "@/api";
+
 export default {
   methods: {
     async changeStatus(item) {
@@ -141,6 +143,11 @@ export default {
     cancelEditing(list){
       list.title=list.originaTitle
       list.editing=false;
+    },
+    handleLogout() {
+      setupPrivateApi(null);
+      localStorage.removeItem("access_token");
+      this.$router.push("/");
     }
   },
 };

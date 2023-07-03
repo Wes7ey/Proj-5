@@ -3,12 +3,19 @@
     class="sidebar bg-black d-flex flex-column justify-center align-center"
   >
     <h2>Crie sua lista aqui =]</h2>
-    <v-btn class="rounded-pill mb-3" size="x-large" @click="openModal(`list`)">
+
+    <textarea
+  v-model="listTitle"
+  placeholder="Agenda, lista de compras, compromissos importantes, compromissos do trabalho..."
+  class="centered-input"
+
+></textarea>
+
+    <v-btn class="rounded-pill mb-3" size="x-large" @click="createNewList(listTitle)">
       <v-icon
-        icon="mdi-folder-arrow-up-outline
-"
+        icon="mdi-folder-arrow-up-outline"
       ></v-icon>
-      <v-tooltip activator="parent" location="top">Criar lista</v-tooltip>
+      <v-tooltip activator="parent" location="bottom">Criar lista</v-tooltip>
     </v-btn>
   </aside>
 
@@ -28,10 +35,12 @@
               src="https://media3.giphy.com/media/ibolLe3mOqHE3PQTtk/200w.gif?cid=6c09b9523ojtap5u32zy30fxkm6rly5bqrjrztvnjw2ka40j&ep=v1_gifs_search&rid=200w.gif&ct=g"
             ></v-img>
             <h1 class="w-100 mb-7"><TitleHome></TitleHome></h1>
-            <v-icon
-              icon="mdi-power
+            <v-btn @click="handleLogout"
+              ><v-icon
+                icon="mdi-power
 "
-            ></v-icon>
+              ></v-icon
+            ></v-btn>
           </header>
 
           <Lmodal
@@ -103,7 +112,7 @@
 
                     <v-btn
                       class="rounded-pill ms-5"
-                      @click="removeList(list.id)"
+                      @click="confirmDelete('list', list.id)"
                     >
                       <v-icon icon="mdi-delete"></v-icon>
                       <v-tooltip activator="parent" location="right"
@@ -162,7 +171,7 @@
                           class="ms-5"
                           size="x-small"
                           color="red darken-1"
-                          @click="removeItem(item.id), toggleItems(index)"
+                          @click="confirmDelete('item', item.id), toggleItems(index)"
                           >Deletar</v-btn
                         >
                       </div>
@@ -187,7 +196,6 @@ import TitleHome from "@/components/TitleHome.vue";
 import apiMixin from "@/Mixins/apiMixins.js";
 import InputEditing from "@/components/InputEditing.vue";
 
-
 export default {
   mixins: [toDoListsApiMixin, toDoItemsApiMixin, apiMixin],
 
@@ -211,7 +219,7 @@ export default {
     Lmodal,
     Loader,
     TitleHome,
-    InputEditing
+    InputEditing,
   },
 
   methods: {
@@ -233,6 +241,15 @@ export default {
         this.toggleItems(lastIndex);
       }
     },
+    confirmDelete(type, id) {
+    if (confirm("Tem certeza que deseja excluir?")) {
+      if (type === 'list') {
+        this.removeList(id);
+      } else if (type === 'item') {
+        this.removeItem(id);
+      }
+    }
+  },
   },
 
   mounted() {
@@ -299,12 +316,13 @@ export default {
   margin-bottom: 10px;
 }
 
-.sidebar input {
+.sidebar textarea {
   width: 100%;
-  height: 40%;
+  height: 10%;
   padding: 5px;
   margin-bottom: 10px;
   border: 1px solid green;
+color: white;
 }
 
 .sidebar button {
@@ -320,6 +338,11 @@ export default {
 .custom-scroll {
   height: 700px;
   overflow-y: auto;
+}
+.centered-input {
+  text-align: center;
+  display: flex;
+  margin: 0 auto;
 }
 
 @keyframes slideIn {
