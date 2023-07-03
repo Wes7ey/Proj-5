@@ -94,6 +94,7 @@
                     <v-btn
                       class="rounded-pill ms-5"
                       @click="openModal('item', list.id)"
+
                     >
                       <v-icon icon="mdi-folder-file-outline"></v-icon>
                       <v-tooltip activator="parent" location="right"
@@ -107,7 +108,7 @@
                       placeholder="Novo item"
                       @create="createNewItem"
                       @closeModal="openModalType = ''"
-                      @closed="toggleItemsAfterModalClosed"
+                      @closed="toggleItemsAfterModalClosed, toggleItems(index)"
                     />
 
                     <v-btn
