@@ -5,16 +5,17 @@
     <h2>Crie sua lista aqui =]</h2>
 
     <textarea
-  v-model="listTitle"
-  placeholder="Agenda, lista de compras, compromissos importantes, compromissos do trabalho..."
-  class="centered-input"
+      v-model="listTitle"
+      placeholder="Agenda, lista de compras, compromissos importantes, compromissos do trabalho..."
+      class="centered-input"
+    ></textarea>
 
-></textarea>
-
-    <v-btn class="rounded-pill mb-3" size="x-large" @click="createNewList(listTitle)">
-      <v-icon
-        icon="mdi-folder-arrow-up-outline"
-      ></v-icon>
+    <v-btn
+      class="rounded-pill mb-3"
+      size="x-large"
+      @click="createNewList(listTitle)"
+    >
+      <v-icon icon="mdi-folder-arrow-up-outline"></v-icon>
       <v-tooltip activator="parent" location="bottom">Criar lista</v-tooltip>
     </v-btn>
   </aside>
@@ -94,7 +95,6 @@
                     <v-btn
                       class="rounded-pill ms-5"
                       @click="openModal('item', list.id)"
-
                     >
                       <v-icon icon="mdi-folder-file-outline"></v-icon>
                       <v-tooltip activator="parent" location="right"
@@ -108,7 +108,7 @@
                       placeholder="Novo item"
                       @create="createNewItem"
                       @closeModal="openModalType = ''"
-                      @closed="toggleItemsAfterModalClosed, toggleItems(index)"
+                      @closed="toggleItemsAfterModalClosed"
                     />
 
                     <v-btn
@@ -172,7 +172,9 @@
                           class="ms-5"
                           size="x-small"
                           color="red darken-1"
-                          @click="confirmDelete('item', item.id), toggleItems(index)"
+                          @click="
+                            confirmDelete('item', item.id), toggleItems(index)
+                          "
                           >Deletar</v-btn
                         >
                       </div>
@@ -194,11 +196,21 @@ import { toDoItemsApiMixin } from "@/api/toDoItems";
 import Lmodal from "@/components/listModal.vue";
 import Loader from "@/components/Loader.vue";
 import TitleHome from "@/components/TitleHome.vue";
-import apiMixin from "@/Mixins/apiMixins.js";
+import MixinAuth from "@/Mixins/apiMixinsAuth";
+import MixinEdit from "@/Mixins/apiMixinsEdit";
+import MixinItem from "@/Mixins/apiMixinsItem";
+import MixinList from "@/Mixins/apiMixinsList";
 import InputEditing from "@/components/InputEditing.vue";
 
 export default {
-  mixins: [toDoListsApiMixin, toDoItemsApiMixin, apiMixin],
+  mixins: [
+    toDoListsApiMixin,
+    toDoItemsApiMixin,
+    MixinAuth,
+    MixinEdit,
+    MixinItem,
+    MixinList,
+  ],
 
   data() {
     return {
@@ -243,14 +255,14 @@ export default {
       }
     },
     confirmDelete(type, id) {
-    if (confirm("Tem certeza que deseja excluir?")) {
-      if (type === 'list') {
-        this.removeList(id);
-      } else if (type === 'item') {
-        this.removeItem(id);
+      if (confirm("Tem certeza que deseja excluir?")) {
+        if (type === "list") {
+          this.removeList(id);
+        } else if (type === "item") {
+          this.removeItem(id);
+        }
       }
-    }
-  },
+    },
   },
 
   mounted() {
@@ -323,7 +335,7 @@ export default {
   padding: 5px;
   margin-bottom: 10px;
   border: 1px solid green;
-color: white;
+  color: white;
 }
 
 .sidebar button {
